@@ -1,15 +1,13 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import TitaMascot from "@/components/TitaMascot";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
 
-const Index = () => {
+const Welcome = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     document.title = "TITA 🥑 — Bienvenida";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", "Hola, soy TITA 🥑, tu compañera para aprender y construir en Web3.");
   }, []);
-
   return (
     <main className="min-h-screen grid place-items-center bg-background">
       <section className="container mx-auto px-6 py-16 text-center animate-fade-in">
@@ -17,13 +15,11 @@ const Index = () => {
           <TitaMascot size={140} />
           <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">Hola, soy TITA 🥑, tu compañera para aprender y construir en Web3.</h1>
           <p className="text-lg text-muted-foreground">Te acompañaré con un onboarding amable, recomendaciones personalizadas y un panel de progreso.</p>
-          <Link to="/onboarding" className="mt-4">
-            <Button variant="hero" size="xl" className="hover-scale">Comenzar</Button>
-          </Link>
+          <Button variant="hero" size="xl" className="hover-scale" onClick={() => navigate('/onboarding')}>Comenzar</Button>
         </div>
       </section>
     </main>
   );
 };
 
-export default Index;
+export default Welcome;

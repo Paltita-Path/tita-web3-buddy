@@ -1,73 +1,53 @@
-# Welcome to your Lovable project
+# TITA 🥑 — Tu compañera para aprender y construir en Web3
 
-## Project info
+TITA es una app cálida y amigable que guía a nuevos builders de Web3 con un flujo de onboarding, recomendaciones personalizadas y un panel de progreso con motivación. Este MVP funciona como prototipo sin conexión a blockchain, preparado para futuras integraciones con Stellar.
 
-**URL**: https://lovable.dev/projects/1076669a-0c2c-4cf3-83b6-dd432ed03f60
+## Flujo del usuario
+1. Pantalla de bienvenida → botón “Comenzar”.
+2. Onboarding (4 pasos): objetivo, nivel, tiempo disponible y área de interés.
+3. Recomendaciones: 3 recursos sugeridos según tus respuestas.
+4. Panel de progreso: marca tareas, observa tu avance y desbloquea el “TITA Builder Badge” al 100%.
+5. Botón “Me siento perdido” para recibir una frase motivadora aleatoria.
 
-## How can I edit this code?
+## Datos locales incluidos
+- Recursos Web3 (10) en `src/data/resources.ts`.
+- Frases motivadoras (5) en `src/data/motivations.ts`.
 
-There are several ways of editing your application.
+## Persistencia
+- Las respuestas del onboarding y el progreso se guardan en `localStorage` vía `src/lib/storage.ts`.
+- Listo para conectar a Supabase en el futuro (ver sección Stellar / Backend).
 
-**Use Lovable**
+## Estilo visual
+- Tema “palta”: verdes y amarillos cálidos, tipografía redondeada (Quicksand), bordes suaves, animaciones sutiles.
+- Mascota TITA y badge generados en `src/assets/`.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/1076669a-0c2c-4cf3-83b6-dd432ed03f60) and start prompting.
+## Ejecutar el proyecto
+Requisitos: Node.js y npm.
 
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
+```bash
 npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+La app corre en http://localhost:8080
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Estructura relevante
+- `src/pages/Index.tsx`: Bienvenida.
+- `src/pages/Onboarding.tsx`: Flujo por pasos.
+- `src/pages/Recommendations.tsx`: Recomendaciones + progreso.
+- `src/components/TitaMascot.tsx`: Mascota TITA.
+- `src/components/ui/*`: Componentes shadcn-ui.
+- `src/index.css` y `tailwind.config.ts`: Sistema de diseño y animaciones.
 
-**Use GitHub Codespaces**
+## Futuro: integración con Stellar (sin implementar en este MVP)
+Este prototipo deja la lógica preparada para:
+- Autenticación y guardado de progreso en Supabase (recomendado). Una vez conectado, reemplazar/combinar `localStorage` por tablas con RLS (p.ej. `profiles`, `progress`).
+- Emisión on-chain del “TITA Builder Badge” en Stellar/Soroban.
+  - Edge function: validar progreso 100% y solicitar la creación del badge (cuenta del proyecto), devolviendo tx hash.
+  - Actualizar la UI para mostrar estado de la transacción y verificar en el explorador.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+> Nota: Para activar la integración nativa con Supabase en Lovable, usa el botón verde “Supabase” en la esquina superior derecha del editor.
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/1076669a-0c2c-4cf3-83b6-dd432ed03f60) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+## SEO
+- Títulos y descripciones por página con `document.title` y meta description.
+- Semántica accesible, imágenes con `alt`, y animaciones suaves.

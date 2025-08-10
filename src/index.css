@@ -2,104 +2,113 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
+/* Design system: Avocado warm theme (HSL only) */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Base surfaces */
+    --background: 50 33% 98%; /* warm off-white */
+    --foreground: 160 20% 18%; /* deep avocado skin */
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 160 20% 18%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 160 20% 18%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    /* Brand */
+    --primary: 142 45% 30%; /* rich avocado green */
+    --primary-foreground: 50 33% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 86 45% 92%; /* pale avocado flesh */
+    --secondary-foreground: 160 25% 20%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 48 95% 55%; /* warm sunny yellow */
+    --accent-foreground: 160 25% 15%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --muted: 86 35% 94%;
+    --muted-foreground: 160 10% 40%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 86 20% 88%;
+    --input: 86 20% 88%;
+    --ring: 142 45% 30%;
 
-    --radius: 0.5rem;
+    --radius: 0.9rem; /* rounded, friendly */
 
-    --sidebar-background: 0 0% 98%;
+    /* Sidebar tokens */
+    --sidebar-background: 86 45% 96%;
+    --sidebar-foreground: 160 20% 20%;
+    --sidebar-primary: 142 45% 30%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 86 40% 92%;
+    --sidebar-accent-foreground: 160 20% 20%;
+    --sidebar-border: 86 20% 88%;
+    --sidebar-ring: 48 95% 55%;
 
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Fancy extras */
+    --gradient-primary: linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(142 60% 38%) 40%, hsl(var(--accent)) 120%);
+    --shadow-glow: 0 10px 30px -10px hsl(142 60% 38% / 0.35), 0 0 0 1px hsl(var(--border));
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 160 30% 10%;
+    --foreground: 50 33% 98%;
 
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 160 30% 12%;
+    --card-foreground: 50 33% 98%;
 
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 160 30% 12%;
+    --popover-foreground: 50 33% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 86 55% 65%; /* brighter green for dark */
+    --primary-foreground: 160 30% 12%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 160 25% 16%;
+    --secondary-foreground: 50 33% 96%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 48 95% 60%;
+    --accent-foreground: 160 30% 12%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    --muted: 160 22% 16%;
+    --muted-foreground: 160 12% 70%;
 
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 65% 45%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 160 22% 20%;
+    --input: 160 22% 20%;
+    --ring: 86 55% 65%;
+
+    --sidebar-background: 160 25% 12%;
+    --sidebar-foreground: 50 33% 96%;
+    --sidebar-primary: 86 55% 65%;
+    --sidebar-primary-foreground: 160 30% 12%;
+    --sidebar-accent: 160 25% 16%;
+    --sidebar-accent-foreground: 50 33% 96%;
+    --sidebar-border: 160 22% 20%;
+    --sidebar-ring: 48 95% 60%;
   }
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-
+  * { @apply border-border; }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Quicksand', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
   }
+}
+
+/* Utilities & component classes using design tokens */
+@layer utilities {
+  .bg-gradient-primary { background-image: var(--gradient-primary); }
+  .shadow-glow { box-shadow: var(--shadow-glow); }
+  .hover-scale { @apply transition-transform duration-200 hover:scale-105; }
+  .story-link { position: relative; display: inline-block; }
+  .story-link::after {
+    content: ""; position: absolute; left: 0; bottom: 0; height: 2px; width: 100%;
+    transform-origin: right; transform: scaleX(0); background: hsl(var(--primary)); transition: transform 300ms ease;
+  }
+  .story-link:hover::after { transform-origin: left; transform: scaleX(1); }
 }
