@@ -1,6 +1,34 @@
 # TITA 🥑 — Tu compañera para aprender y construir en Web3
 
 TITA es una app cálida y amigable que guía a nuevos builders de Web3 con un flujo de onboarding, recomendaciones personalizadas y un panel de progreso con motivación. Este MVP funciona como prototipo sin conexión a blockchain, preparado para futuras integraciones con Stellar.
+## Demo
+<img alt="TITA demo" src="docs/demo.gif" width="720" />
+<!-- o añade 2–3 screenshots en docs/ y enlázalos -->
+
+## Features
+- ✅ Onboarding (objetivo, nivel, tiempo, interés)
+- ✅ Recomendaciones personalizadas (datos locales)
+- ✅ Panel de progreso con “TITA Builder Badge” (local)
+- ✅ Botón “Me siento perdido” (motivaciones)
+- 🎯 Accesible, animaciones suaves, diseño “palta”
+
+## Roadmap
+- [ ] Autenticación y progreso en Supabase (RLS)
+- [ ] Emisión on-chain del Builder Badge (Stellar/Soroban)
+- [ ] UI de estado de transacción + link a explorador
+- [ ] i18n (ES/EN) y mejoras A11y
+
+## Stack
+- Vite + TypeScript
+- Tailwind + shadcn/ui
+- Estado/persistencia: localStorage (MVP)
+
+## Scripts
+```bash
+npm install
+npm run dev      # desarrollo en http://localhost:8080
+npm run build    # build de producción
+npm run preview  # previsualizar build
 
 ## Flujo del usuario
 1. Pantalla de bienvenida → botón “Comenzar”.
