@@ -1,7 +1,7 @@
 # TITA 🥑 — Tu compañera para aprender y construir en Web3
 
 TITA es una app cálida y amigable que guía a nuevos builders de Web3 con un flujo de onboarding, recomendaciones personalizadas y un panel de progreso con motivación. Este MVP funciona como prototipo sin conexión a blockchain, preparado para futuras integraciones con Stellar.
-## Demo
+## Web https://tita-web3-buddy.lovable.app/
 <img alt="TITA demo" src="docs/demo.gif" width="720" />
 <!-- o añade 2–3 screenshots en docs/ y enlázalos -->
 
