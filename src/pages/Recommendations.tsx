@@ -4,22 +4,81 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RESOURCES } from "@/data/resources";
 import { MOTIVATIONS } from "@/data/motivations";
-import { Storage } from "@/lib/storage";
+import { Storage, type OnboardingAnswers } from "@/lib/storage";
 import { toast } from "sonner";
 import TitaMascot from "@/components/TitaMascot";
 
-const pickRecommendations = (area?: string) => {
-  if (!area) return RESOURCES.slice(0, 3);
-  const filtered = RESOURCES.filter(r => r.tags.includes(area as any));
-  if (filtered.length >= 3) return filtered.slice(0, 3);
-  return [...filtered, ...RESOURCES.filter(r => !filtered.includes(r))].slice(0,3);
+type ResourceItem = (typeof RESOURCES)[number];
+
+type Scored = { r: ResourceItem; score: number };
+
+const objectiveHints = (objetivo?: string): string[] => {
+  switch (objetivo) {
+    case "Aprender a programar":
+      return ["Desarrollo"];
+    case "Encontrar comunidad":
+      return ["Comunidad"];
+    case "Ganar experiencia en hackathons":
+      return ["Desarrollo", "Comunidad"];
+    case "Crear un proyecto":
+      return ["Desarrollo", "NFTs", "Finanzas DeFi"];
+    default:
+      return [];
+  }
+};
+
+const scoreResource = (r: ResourceItem, a?: OnboardingAnswers) => {
+  let s = 0;
+  if (!a) return s;
+  if (a.area && r.tags.includes(a.area as any)) s += 3;
+  for (const tag of objectiveHints(a.objetivo)) {
+    if (r.tags.includes(tag as any)) s += 2;
+  }
+  if (a.preferencia === "Proyectos prácticos" && /(Bootcamp|Hackathon|Quest)/i.test(r.title)) s += 1;
+  if (a.nivel === "Avanzado" && /(DAO|DeFi|Stellar)/i.test(r.title)) s += 1;
+  if (a.tiempo === "Menos de 3h" && /(Guía|Intro|Básico|Quest)/i.test(r.title)) s += 1;
+  return s;
+};
+
+const pickRecommendations = (answers?: OnboardingAnswers) => {
+  const scored: Scored[] = RESOURCES.map((r) => ({ r, score: scoreResource(r, answers || undefined) }))
+    .sort((a, b) => b.score - a.score);
+  const top = scored.slice(0, 3).map((s) => s.r);
+  return top.every((_, i, arr) => scored[i]?.score === 0) ? RESOURCES.slice(0, 3) : top;
 };
 
 const Recommendations = () => {
   const answers = Storage.loadOnboarding();
-  const recs = useMemo(() => pickRecommendations(answers?.area), [answers]);
+  const recs = useMemo(() => pickRecommendations(answers || undefined), [answers]);
   const [checks, setChecks] = useState<boolean[]>(() => Storage.loadProgress());
+  const [xp, setXp] = useState<number>(() => Storage.loadXP());
+  const [streak, setStreak] = useState<number>(() => Storage.loadStreak());
+  const [lastActivity, setLastActivity] = useState<string>(() => Storage.loadLastActivity());
+  const level = Math.floor(xp / 30) + 1;
   const progress = Math.round((checks.filter(Boolean).length / 3) * 100);
+
+  const todayStr = new Date().toDateString();
+  const isYesterday = (d: string) => {
+    if (!d) return false;
+    const prev = new Date(d);
+    const tmp = new Date(prev);
+    tmp.setDate(prev.getDate() + 1);
+    return tmp.toDateString() === todayStr;
+  };
+
+  const bumpStreakIfNeeded = () => {
+    if (lastActivity === todayStr) return; // ya contamos hoy
+    if (!lastActivity) {
+      setStreak(1);
+    } else if (isYesterday(lastActivity)) {
+      setStreak((s) => s + 1);
+    } else {
+      setStreak(1);
+    }
+    setLastActivity(todayStr);
+  };
+
+  const awardXP = (amount: number) => setXp((x) => x + amount);
 
   useEffect(() => {
     document.title = "TITA 🥑 — Recomendaciones";
@@ -30,6 +89,12 @@ const Recommendations = () => {
   useEffect(() => {
     Storage.saveProgress(checks);
   }, [checks]);
+
+  useEffect(() => {
+    Storage.saveXP(xp);
+    Storage.saveStreak(streak);
+    if (lastActivity) Storage.saveLastActivity(lastActivity);
+  }, [xp, streak, lastActivity]);
 
   const onLost = () => {
     const msg = MOTIVATIONS[Math.floor(Math.random() * MOTIVATIONS.length)];
@@ -55,6 +120,7 @@ const Recommendations = () => {
                 <CardDescription>{r.tags.join(" · ")}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                <img src="/placeholder.svg" alt={`Recurso ${r.title} — ${r.tags.join(", ")}`} className="w-full h-32 object-cover rounded-md" loading="lazy" />
                 <p className="text-sm text-muted-foreground">{r.description}</p>
                 <a href={r.link} target="_blank" rel="noreferrer" className="story-link text-sm">
                   Abrir recurso ↗
@@ -78,11 +144,18 @@ const Recommendations = () => {
                     <input
                       type="checkbox"
                       checked={checks[i]}
-                      onChange={(e) => setChecks((c) => {
-                        const next = [...c];
-                        next[i] = e.target.checked;
-                        return next;
-                      })}
+                      onChange={(e) =>
+                        setChecks((c) => {
+                          const next = [...c];
+                          const was = next[i];
+                          next[i] = e.target.checked;
+                          if (!was && next[i]) {
+                            awardXP(10);
+                            bumpStreakIfNeeded();
+                          }
+                          return next;
+                        })
+                      }
                     />
                     <span>Revisar: {r.title}</span>
                   </label>
@@ -97,6 +170,11 @@ const Recommendations = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <Progress value={progress} />
+                <div className="text-sm text-muted-foreground flex flex-wrap gap-4">
+                  <span>Nivel {level}</span>
+                  <span>XP {xp}</span>
+                  <span>Racha {streak} {streak === 1 ? "día" : "días"}</span>
+                </div>
                 {progress === 100 ? (
                   <div className="space-y-3 animate-fade-in">
                     <p className="font-medium">¡Felicitaciones! Has completado tu camino inicial con TITA 🥑</p>

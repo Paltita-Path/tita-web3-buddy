@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import TitaMascot from "@/components/TitaMascot";
 import { Storage, type OnboardingAnswers } from "@/lib/storage";
 
-const steps = [
+const baseSteps = [
   {
     key: "objetivo",
     question: "¿Cuál es tu objetivo principal en Web3?",
@@ -35,7 +35,19 @@ const steps = [
   },
 ] as const;
 
-type Step = (typeof steps)[number];
+type Step = (typeof baseSteps)[number] | { key: keyof OnboardingAnswers; question: string; options: string[] };
+
+const getSteps = (answers: OnboardingAnswers) => {
+  const steps = [...baseSteps] as Step[];
+  if (answers.objetivo === "Aprender a programar") {
+    steps.splice(2, 0, {
+      key: "preferencia",
+      question: "¿Cómo prefieres aprender?",
+      options: ["Cursos guiados", "Proyectos prácticos", "Mentoría/comunidad"],
+    });
+  }
+  return steps as Step[];
+};
 
 const Onboarding = () => {
   const navigate = useNavigate();
@@ -49,9 +61,10 @@ const Onboarding = () => {
     if (meta) meta.setAttribute("content", "Cuéntame sobre ti y te recomendaré un camino Web3.");
   }, []);
 
-  const step = useMemo<Step>(() => steps[current], [current]);
-  const value = (answers as any)[step.key] as string | undefined;
-  const progress = Math.round(((current) / steps.length) * 100);
+const steps = useMemo(() => getSteps(answers), [answers]);
+const step = useMemo<Step>(() => steps[current], [steps, current]);
+const value = (answers as any)[step.key] as string | undefined;
+const progress = Math.round(((current) / steps.length) * 100);
 
   const onSelect = (v: string) => {
     setAnswers((a) => ({ ...a, [step.key]: v }));
